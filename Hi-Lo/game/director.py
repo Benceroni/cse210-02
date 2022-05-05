@@ -1,6 +1,4 @@
-from re import S
 from game.deck import Deck  
-
  
 class Director:
     """A person who directs the game. 
