@@ -8,9 +8,8 @@ class Deck:
     The responsibility of Deck is to keep track of a card previously drawn and a new card drawn from the top of the deck. 
    
     Attributes:
-        value (int): The number of spots on the side facing up.
-        points (int): The number of points the die is worth.
-        x, y (int): The screen X and Y coordinates where the die will display.
+        current_card (int): The currently drawn card.
+        last_card (int): The previous card drawn.
     """
 
     def __init__(self):
@@ -24,17 +23,11 @@ class Deck:
 
 
     def draw(self):
-        """Puts the current value of the card as the 'old value', then generates a new random value.
+        """Sets last_card as the value of the current card, then generates a new random value for current_card.
         
         Args:
             self (Deck): An instance of Deck.
         """
         self.last_card = self.current_card
         self.current_card = random.randint(1,13)
-
-
-    def display(self):
-
-        print(self.current_card)
-        return
 
