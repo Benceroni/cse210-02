@@ -89,7 +89,7 @@ class Director:
         """
         # Make sure the player CAN still play before we ask... Player might have run out of points!
         if self.is_playing:
-            valid_input = True   
+            valid_input = False   
             while not valid_input:
                 user_response = input("Would you like to keep playing? [y/n]: ").lower()
                 valid_input = user_response in ['y','n']
@@ -97,6 +97,7 @@ class Director:
                     print("I'm sorry, please confine your response to 'y' or 'n'.\n")
 
             self.is_playing = (user_response == 'y')
+            print()
 
 
     def ask_hi_lo(self):
@@ -107,13 +108,14 @@ class Director:
         Returns:
             user_guess (str): The user's choice, either 'h' or 'l'. 
         """
+        print()
         valid_input = False
         while not valid_input:
             user_guess = input("Next card higher or lower? [h/l]: ").lower()
             valid_input = user_guess in ['h','l']
             if not valid_input:
                 print("I'm sorry, please confine your response to 'h' or 'l'.\n")
-        
+        print()
         return user_guess
 
  
@@ -155,8 +157,10 @@ class Director:
             self.score += 100
             print("You won 100 points!")
         else:
+            if (self.deck.current_card == self.deck.last_card):
+                print("Equal value? Well... You weren't wrong, but more importantly you weren't right either.")
             self.score -= 75
             print("You lost 75 points...")
 
-        print(f"Your total score is:\t{self.score}\n".expandtabs(25))
+        print(f"Your current score is:\t{self.score}\n".expandtabs(25))
         self.is_playing = (self.score > 0)
