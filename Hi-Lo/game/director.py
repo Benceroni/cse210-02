@@ -69,7 +69,7 @@ class Director:
             self (Director): an instance of Director.
         """
         print()
-        if self.score == 0:  # Player ran out of points.
+        if self.score <= 0:  # Player ran out of points. (Possible to go negative.)
             print("Well, shoot... You ran out of points. Your streak is over.")
         else:   # Or the player must have chosen to quit.
             print("Ok, we will quit playing.")
