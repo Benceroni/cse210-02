@@ -1,9 +1,9 @@
-# cse210-02 Hi-Lo Game
+# cse210-02 Hilo Game
 
 ---
 ## Overview
 
-Hi-Lo (sometimes "Hilo") is a game in which the player guesses if the next card drawn by the dealer will be higher or lower than the previous one. Points are won or lost based on whether or not the player guessed correctly.
+Hilo (sometimes "Hi-Lo", or other variations) is a game in which the player guesses if the next card drawn by the dealer will be higher or lower than the previous one. Points are won or lost based on whether or not the player guessed correctly.
 
 ---
 ## Rules
