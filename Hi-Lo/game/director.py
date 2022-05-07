@@ -127,7 +127,7 @@ class Director:
         """
 
         self.deck.draw() 
-        # Increase the number of rolls made.
+        # Increase the number of draws made.
         self.num_draws += 1
 
 
