@@ -1,7 +1,22 @@
 from re import S
 from game.deck import Deck  
 
- 
+"""NOTE:
+Our team did not get to the point of delegation before our team meeting had to end. 
+
+We each decided to create our own branch and try creating the program on our own and, 
+compare each other's solutions.
+
+I worked on my program for about three hours, troubleshot it for another 90 minutes, and 
+ran out of time to keep working on it.
+
+At that point, I compared my solution to another team member's solution and studied the 
+differences to see how/why/where mine had failed.
+
+I identified the most with Dallas's solution as it was similar to mine and I understand
+why his works.
+""" 
+
 class Director:
     """A person who directs the game. 
     
@@ -94,4 +109,3 @@ class Director:
             else:
                 self.is_playing = False
                 print("Thanks for playing!")
-            
