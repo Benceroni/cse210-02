@@ -125,8 +125,6 @@ class Director:
         Args:
             self (Director): An instance of Director.
         """
-        if not self.is_playing:
-            return 
 
         self.deck.draw() 
         # Increase the number of rolls made.
@@ -139,8 +137,6 @@ class Director:
         Args:
             self (Director): An instance of Director.
         """
-        if not self.is_playing:
-            return
         
         if self.deck.last_card > 0:
             print(f"The previous card was: {self.deck.last_card}")
