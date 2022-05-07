@@ -1,45 +1,25 @@
-from re import S
-from game.deck import Deck  
+from game.deck import Deck
 
- 
 class Director:
     """A person who directs the game. 
     
     The responsibility of a Director is to control the sequence of play.
-
+    
     Attributes:
-        dice (List[Die]): A list of Die instances.
-        is_playing (boolean): Whether or not the game is being played.
-        score (int): The score for one round of play.
-        total_score (int): The score for the entire game.
+        
     """
-
     def __init__(self):
         """Constructs a new Director.
         
         Args:
             self (Director): an instance of Director.
         """
-
-        self.deck = Deck()
         self.is_playing = True
+        self.game_deck = Deck()
+        self.turn = 0
+        self.response = ''
+        self.answer = ''
         self.score = 300
-        self.num_draws = 0
-
-        
-
-    def show_title(self):
-        """Shows a title screen and displays the rules of the game.
-        
-        Args:
-            self (Director): an instance of Director.
-        """
-        print("\33[2J\33[H")    # Clear/Home Screen
-        print("DICE\n")
-        print("The rules are simple. Roll the dice. Count the 1s and 5s. Each 1 is worth")
-        print("100 points, each 5 is worth 50 points. As long as you roll at least a 1")
-        print("or a 5 you can keep playing and add to your score.\n")
-        print("If you do not roll any 1s or 5s, the game is over.\n")
 
 
     def start_game(self):
@@ -48,92 +28,62 @@ class Director:
         Args:
             self (Director): an instance of Director.
         """
-        self.show_title()
+        self.game_deck.draw_card()
 
         while self.is_playing:
-            self.show_card()
+            self.turn += 1
             self.get_inputs()
-            self.update_card()
-            self.show_card()
-            self.do_score()
-
-        self.end_game()
-
-
-    def end_game(self):
-        """Provides a clean exit to the game by printing the final score and saying goodbye.
-        
-        Args:
-            self (Director): an instance of Director.
-        """
-        print()
-        if self.num_rolls == 0: # What? Quitting without even trying?!
-            print("Making no attempt keeps you safe from failure... It also keeps you safe from success.\n")
-            return
-        elif self.num_rolls == 1 and self.score == 0: # Zero on the first roll? Darn it.
-            print("No score on the first roll. Well, isn't that rotten luck?")
-        elif self.score == 0:  # Otherwise, player did not roll a 1 or a 5... 
-            print("Well, shoot... You didn't roll a 1 or a 5. Your streak is over.")
-        else:   # Or the player must have chosen to quit.
-            print("You know there's no risk to keep rolling, right? Oh well...")
-
-        rolls = "roll" if self.num_rolls == 1 else "rolls"
-
-        print(f"You achieved a final score of {self.total_score} in {self.num_rolls} {rolls}.\n")
-        print("Thank you for playing! Goodbye!\n")
+            self.game_deck.draw_card()
+            self.do_checks()
+            self.do_output()
 
 
     def get_inputs(self):
-        """Ask the user if they want to roll.
+        """Ask the user if card is higher or lower
 
         Args:
             self (Director): An instance of Director.
         """
-        valid_input = False
-        while not valid_input:
-            roll_dice = input("Roll dice? [y/n]: ").lower()
-            valid_input = roll_dice in ['y','n']
-            if not valid_input:
-                print("I'm sorry, please confine your response to 'y' or 'n'.\n")
-        self.is_playing = (roll_dice == "y")
+        print(f"\nThe card is {self.game_deck.current_card}")
+        self.response = input("Higher, lower, or same? (high/low/same): ")
 
-       
-    def update_card(self):
-        """Updates the player's score.
+
+    def do_checks(self):
+        """Determine the correct choice, and check to see if the choice is correct.
 
         Args:
             self (Director): An instance of Director.
         """
-        if not self.is_playing:
-            return 
+        if self.game_deck.last_card > self.game_deck.current_card:
+            self.answer = 'low'
+        elif self.game_deck.last_card < self.game_deck.current_card:
+            self.answer = 'high'
+        elif self.game_deck.last_card == self.game_deck.current_card:
+            self.answer = 'same'
 
-        # Bugfix: Round score needs to be reset before rolling the dice again.
-        self.score = 0
-
-        for i in range(len(self.dice)):
-            die = self.dice[i]
-            die.roll()
-            self.score += die.points 
-        self.total_score += self.score
-        # Increase the number of rolls made.
-        self.num_rolls += 1
-
-
-    def show_card(self):
-        """Displays the dice and the score. Also asks the player if they want to roll again. 
-
-        Args:
-            self (Director): An instance of Director.
-        """
-        if not self.is_playing:
-            return
+        if self.response != self.answer:
+            self.score -= 75
+        elif self.response == self.answer:
+            self.score += 100
         
-        print(deck.current_card)
+        if self.score <= 0:
+            self.is_playing = False
+
+    def do_output(self):
+        """ Outputs current card, handles scoring, and asks player if they want
+            to continue
+
+        Args:
+            self (Director): An instance of Director.
+        """
+        print(f"Next card was {self.game_deck.current_card}")
+        print(f"Your score is { self.score }")
+
+        keep_playing = ''
+
+        if self.is_playing:
+            keep_playing = input(f"Play again? [y/n]: ")
+            if keep_playing != 'y':
+                self.is_playing = False
 
 
-    def do_score(self):
-
-        print("\n")
-        print(f"Score this round:\t{self.score}".expandtabs(25))
-        print(f"Your total score is:\t{self.total_score}\n".expandtabs(25))
-        self.is_playing = (self.score > 0)

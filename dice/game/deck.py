@@ -1,45 +1,28 @@
 import random
 
-
-# 1) Add the class declaration. Use the following class comment.
 class Deck:
-    """A small cube with a different number of spots on each of its six sides.
-
-    The responsibility of Die is to keep track of the side facing up and calculate the points for 
-    it.
+    """A deck of cards that will generate a random card value, 1-13.
+    The responsibility of Deck is to keep track of a card previously drawn and a new card drawn from the top of the deck. 
    
     Attributes:
-        value (int): The number of spots on the side facing up.
-        points (int): The number of points the die is worth.
-        x, y (int): The screen X and Y coordinates where the die will display.
+        current_card (int): The currently drawn card.
+        last_card (int): The previous card drawn.
     """
-
-# 2) Create the class constructor. Use the following method comment.
-    def __init__(self, param_x = 0, param_y = 0):
-        """Constructs a new instance of Die with a value and points attribute. 
-        Sets x,y to passed value, or 0,0 if none set.
-
+    
+    def __init__(self):
+        """Constructs a new instance of Deck with a current card attribute and a last card attribute. 
         Args:
-            self (Die): An instance of Die.
+            self (Deck): An instance of Deck.
         """
+        self.current_card = 0
         self.last_card = 0
-        self.current_card = random.randint(1,13)
 
-# 3) Create the roll(self) method. Use the following method comment.
-    def draw(self):
-        """Generates a new random value.
+    def draw_card(self):
+        """Sets last_card as the value of the current card, then generates a new random value for current_card.
         
         Args:
             self (Deck): An instance of Deck.
         """
         self.last_card = self.current_card
-        self.current_card = random.randint(1,13)
-
-
-
-
-    def display(self):
-
-        print(self.current_card)
-        return
+        self.current_card = random.randint(1,14)
 
