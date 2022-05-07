@@ -158,7 +158,7 @@ class Director:
             print("You won 100 points!")
         else:
             if (self.deck.current_card == self.deck.last_card):
-                print("Equal value? Well... You weren't wrong, but more importantly you weren't right either.")
+                print("Equal value? Well, you weren't wrong, but more importantly: You weren't right, either.")
             self.score -= 75
             print("You lost 75 points...")
 
