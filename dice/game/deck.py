@@ -19,7 +19,6 @@ class Deck:
             self (Deck): An instance of Deck.
         """
         self.current_card = random.randint(1,13)
-        self.last_card = random.randint(1,13)
 
 # 3) Create the draw(self) method.
     def draw(self):
