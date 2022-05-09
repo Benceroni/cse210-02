@@ -6,10 +6,10 @@ class Director:
     The responsibility of a Director is to control the sequence of play.
 
     Attributes:
-        dice (List[Die]): A list of Die instances.
+        deck : A single Deck instance.
         is_playing (boolean): Whether or not the game is being played.
         score (int): The score for one round of play.
-        total_score (int): The score for the entire game.
+        num_guesses (int): The number of guesses attempted by the player.
     """
 
     def __init__(self):
@@ -22,7 +22,7 @@ class Director:
         self.deck = Deck()
         self.is_playing = True
         self.score = 300
-        self.num_draws = 0
+        self.num_guesses = 0
         
 
 
@@ -74,15 +74,15 @@ class Director:
         else:   # Or the player must have chosen to quit.
             print("Ok, we will quit playing.")
 
-        draws = "draw" if self.num_draws == 1 else "draws"
+        guess_word = "guess" if self.num_guesses == 1 else "guesses"
 
-        print(f"You achieved a final score of {self.score} in {self.num_draws} {draws}.\n")
+        print(f"You achieved a final score of {self.score} in {self.num_guesses} {guess_word}.\n")
         print("Thank you for playing! Goodbye!\n")
 
 
     def ask_quit_game(self):
         """Ask the user if they want to keep playing. Updates the is_playing attribute based
-        on user's decision.
+        on player's decision.
 
         Args:
             self (Director): An instance of Director.
@@ -120,7 +120,8 @@ class Director:
 
  
     def update_card(self):
-        """Updates the player's score.
+        """Updates the cards. The current card becomes the last card, and a new 
+        card is drawn (handled by Deck). The number of guesses is increased by 1.
 
         Args:
             self (Director): An instance of Director.
@@ -128,11 +129,12 @@ class Director:
 
         self.deck.draw() 
         # Increase the number of draws made.
-        self.num_draws += 1
+        self.num_guesses += 1
 
 
     def show_card(self):
-        """Displays the current value of the card. 
+        """Displays the value of the previous card (if there is one), and the value 
+        of the current card. 
 
         Args:
             self (Director): An instance of Director.
@@ -145,18 +147,26 @@ class Director:
 
     def do_score(self, guess):
         """Checks the users guess against the evaluation of the two cards and determines 
-        a win or a loss of points. Notifies the user """
+        a win or a loss of points. Notifies the user.
+        
+        Args:
+            self (Director): an instance of Director.
+            guess (str) : The player's guess previously obtained and passed in.
+         """
         print()
 
         if  (guess == 'h' and self.deck.current_card > self.deck.last_card) or \
             (guess == 'l' and self.deck.current_card < self.deck.last_card):
+            # If the player's guess matches the relation of the two cards, they win points.
             self.score += 100
             print("You won 100 points!")
         else:
+            # Otherwise, they lose points.
             if (self.deck.current_card == self.deck.last_card):
                 print("Equal value? Well, you weren't wrong, but more importantly: You weren't right, either.")
             self.score -= 75
             print("You lost 75 points...")
 
+        # Print the score and determine if the player is able to continue playing.
         print(f"Your current score is:\t{self.score}\n".expandtabs(25))
         self.is_playing = (self.score > 0)
