@@ -84,10 +84,7 @@ class Director:
         self.deck.draw()
         print(f"Next card was: {self.deck.current_card}")
 
-        if self.deck.last_card >= self.deck.current_card and self.hi_lo == "l" \
-        or self.deck.last_card <= self.deck.current_card and self.hi_lo == "h":
-            self.score += 100
-        else: self.score -= 75
+        self.deck.calculate_value(self.hi_lo)
         self.num_draws += 1
 
     def do_score(self):
@@ -96,6 +93,7 @@ class Director:
         Args:
             self (Director): an instance of Director.
         """
+        self.score += self.deck.value
         print(f"Your score is: {self.score}")
         self.is_playing = (self.score > 0)
         if self.score <= 0:
