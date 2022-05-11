@@ -1,4 +1,5 @@
-from game.deck import Deck  
+from game.deck import Deck 
+from game.player import Player 
  
 class Director:
     """A person who directs the game. 
@@ -15,21 +16,17 @@ class Director:
     def __init__(self):
         """Constructs a new Director.
         
-        Args:
+        Parameters:
             self (Director): an instance of Director.
         """
-
         self.deck = Deck()
-        self.is_playing = True
-        self.score = 300
-        self.num_guesses = 0
-        
+        self.player = Player("Player", 300)
 
 
     def show_title(self):
         """Shows a title screen and displays the rules of the game.
         
-        Args:
+        Parameters:
             self (Director): an instance of Director.
         """
         print("\33[2J\33[H")    # Clear/Home Screen
@@ -46,17 +43,19 @@ class Director:
     def start_game(self):
         """Starts the game by running the main game loop.
         
-        Args:
+        Parameters:
             self (Director): an instance of Director.
         """
         self.show_title()
 
-        while self.is_playing:
-            self.show_card()
-            a_guess = self.ask_hi_lo()
-            self.update_card()
-            self.show_card()
-            self.do_score(a_guess)
+        while self.player.is_playing:
+            self.deck.show_cards()
+            self.ask_hi_lo()
+            self.deck.draw()
+            self.deck.show_cards()
+            self.deck.calculate_draw(self.player.choice)    
+            self.player.set_score(self.deck.value)
+            self.player.show_score()
             self.ask_quit_game()
 
         self.do_end_game()
@@ -65,18 +64,17 @@ class Director:
     def do_end_game(self):
         """Provides a clean exit to the game by printing the final score and saying goodbye.
         
-        Args:
+        Parameters:
             self (Director): an instance of Director.
         """
-        print()
-        if self.score <= 0:  # Player ran out of points. (Possible to go negative.)
+        if self.player.score <= 0:  # Player ran out of points. (Possible to go negative.)
             print("Well, shoot... You ran out of points. Your streak is over.")
         else:   # Or the player must have chosen to quit.
             print("Ok, we will quit playing.")
 
-        guess_word = "guess" if self.num_guesses == 1 else "guesses"
+        guess_word = "guess" if self.player.num_guesses == 1 else "guesses"
 
-        print(f"You achieved a final score of {self.score} in {self.num_guesses} {guess_word}.\n")
+        print(f"You achieved a final score of {self.player.score} in {self.player.num_guesses} {guess_word}.\n")
         print("Thank you for playing! Goodbye!\n")
 
 
@@ -84,89 +82,24 @@ class Director:
         """Ask the user if they want to keep playing. Updates the is_playing attribute based
         on player's decision.
 
-        Args:
+        Parameters:
             self (Director): An instance of Director.
         """
         # Make sure the player CAN still play before we ask... Player might have run out of points!
-        if self.is_playing:
-            valid_input = False   
-            while not valid_input:
-                user_response = input("Would you like to keep playing? [y/n]: ").lower()
-                valid_input = user_response in ['y','n']
-                if not valid_input:
-                    print("I'm sorry, please confine your response to 'y' or 'n'.\n")
-
-            self.is_playing = (user_response == 'y')
+        if self.player.is_playing:
+            prompt = "Would you like to keep playing?"
+            self.player.make_choice(prompt)
+            self.player.is_playing = (self.player.choice == 'y')
             print()
 
 
     def ask_hi_lo(self):
         """Ask the user to guess if the next card is higher or lower.
 
-        Args:
+        Parameters:
             self (Director): An instance of Director.
-        Returns:
-            user_guess (str): The user's choice, either 'h' or 'l'. 
         """
-        print()
-        valid_input = False
-        while not valid_input:
-            user_guess = input("Next card higher or lower? [h/l]: ").lower()
-            valid_input = user_guess in ['h','l']
-            if not valid_input:
-                print("I'm sorry, please confine your response to 'h' or 'l'.\n")
-        print()
-        return user_guess
-
+        prompt = "Do you think the next card is higher or lower?"
+        valid_answers = ['h','l']
+        self.player.make_choice(prompt, valid_answers)
  
-    def update_card(self):
-        """Updates the cards. The current card becomes the last card, and a new 
-        card is drawn (handled by Deck). The number of guesses is increased by 1.
-
-        Args:
-            self (Director): An instance of Director.
-        """
-
-        self.deck.draw() 
-        # Increase the number of draws made.
-        self.num_guesses += 1
-
-
-    def show_card(self):
-        """Displays the value of the previous card (if there is one), and the value 
-        of the current card. 
-
-        Args:
-            self (Director): An instance of Director.
-        """
-        
-        if self.deck.last_card > 0:
-            print(f"The previous card was: {self.deck.last_card}")
-        print(f"The card now showing is: {self.deck.current_card}")
-
-
-    def do_score(self, guess):
-        """Checks the users guess against the evaluation of the two cards and determines 
-        a win or a loss of points. Notifies the user.
-        
-        Args:
-            self (Director): an instance of Director.
-            guess (str) : The player's guess previously obtained and passed in.
-         """
-        print()
-
-        if  (guess == 'h' and self.deck.current_card > self.deck.last_card) or \
-            (guess == 'l' and self.deck.current_card < self.deck.last_card):
-            # If the player's guess matches the relation of the two cards, they win points.
-            self.score += 100
-            print("You won 100 points!")
-        else:
-            # Otherwise, they lose points.
-            if (self.deck.current_card == self.deck.last_card):
-                print("Equal value? Well, you weren't wrong, but more importantly: You weren't right, either.")
-            self.score -= 75
-            print("You lost 75 points...")
-
-        # Print the score and determine if the player is able to continue playing.
-        print(f"Your current score is:\t{self.score}\n".expandtabs(25))
-        self.is_playing = (self.score > 0)
