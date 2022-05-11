@@ -1,4 +1,5 @@
-from game.deck import Deck  
+from game.deck import Deck
+from game.player import Player
  
 class Director:
     """A person who directs the game. 
@@ -21,7 +22,8 @@ class Director:
 
         self.deck = Deck()
         self.is_playing = True
-        self.score = 300
+        # self.score = 300
+        self.score = Player()
         self.num_guesses = 0
         
 
@@ -56,7 +58,8 @@ class Director:
             a_guess = self.ask_hi_lo()
             self.update_card()
             self.show_card()
-            self.do_score(a_guess)
+            # self.do_score(a_guess)
+            self.score.do_score(a_guess, self.deck.current_card, self.deck.last_card)
             self.ask_quit_game()
 
         self.do_end_game()
@@ -69,14 +72,14 @@ class Director:
             self (Director): an instance of Director.
         """
         print()
-        if self.score <= 0:  # Player ran out of points. (Possible to go negative.)
+        if self.score.score <= 0:  # Player ran out of points. (Possible to go negative.)
             print("Well, shoot... You ran out of points. Your streak is over.")
         else:   # Or the player must have chosen to quit.
             print("Ok, we will quit playing.")
 
         guess_word = "guess" if self.num_guesses == 1 else "guesses"
 
-        print(f"You achieved a final score of {self.score} in {self.num_guesses} {guess_word}.\n")
+        print(f"You achieved a final score of {self.score.score} in {self.num_guesses} {guess_word}.\n")
         print("Thank you for playing! Goodbye!\n")
 
 
@@ -145,28 +148,28 @@ class Director:
         print(f"The card now showing is: {self.deck.current_card}")
 
 
-    def do_score(self, guess):
-        """Checks the users guess against the evaluation of the two cards and determines 
-        a win or a loss of points. Notifies the user.
+    # def do_score(self, guess):
+    #     """Checks the users guess against the evaluation of the two cards and determines 
+    #     a win or a loss of points. Notifies the user.
         
-        Args:
-            self (Director): an instance of Director.
-            guess (str) : The player's guess previously obtained and passed in.
-         """
-        print()
+    #     Args:
+    #         self (Director): an instance of Director.
+    #         guess (str) : The player's guess previously obtained and passed in.
+    #      """
+    #     print()
 
-        if  (guess == 'h' and self.deck.current_card > self.deck.last_card) or \
-            (guess == 'l' and self.deck.current_card < self.deck.last_card):
-            # If the player's guess matches the relation of the two cards, they win points.
-            self.score += 100
-            print("You won 100 points!")
-        else:
-            # Otherwise, they lose points.
-            if (self.deck.current_card == self.deck.last_card):
-                print("Equal value? Well, you weren't wrong, but more importantly: You weren't right, either.")
-            self.score -= 75
-            print("You lost 75 points...")
+    #     if  (guess == 'h' and self.deck.current_card > self.deck.last_card) or \
+    #         (guess == 'l' and self.deck.current_card < self.deck.last_card):
+    #         # If the player's guess matches the relation of the two cards, they win points.
+    #         self.score += 100
+    #         print("You won 100 points!")
+    #     else:
+    #         # Otherwise, they lose points.
+    #         if (self.deck.current_card == self.deck.last_card):
+    #             print("Equal value? Well, you weren't wrong, but more importantly: You weren't right, either.")
+    #         self.score -= 75
+    #         print("You lost 75 points...")
 
-        # Print the score and determine if the player is able to continue playing.
-        print(f"Your current score is:\t{self.score}\n".expandtabs(25))
-        self.is_playing = (self.score > 0)
+    #     # Print the score and determine if the player is able to continue playing.
+    #     print(f"Your current score is:\t{self.score}\n".expandtabs(25))
+    #     self.is_playing = (self.score > 0)
