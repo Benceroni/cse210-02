@@ -16,10 +16,9 @@ class Director:
     def __init__(self):
         """Constructs a new Director.
         
-        Args:
+        Parameters:
             self (Director): an instance of Director.
         """
-
         self.deck = Deck()
         self.player = Player()
 
@@ -28,7 +27,7 @@ class Director:
     def show_title(self):
         """Shows a title screen and displays the rules of the game.
         
-        Args:
+        Parameters:
             self (Director): an instance of Director.
         """
         print("\33[2J\33[H")    # Clear/Home Screen
@@ -45,7 +44,7 @@ class Director:
     def start_game(self):
         """Starts the game by running the main game loop.
         
-        Args:
+        Parameters:
             self (Director): an instance of Director.
         """
         self.show_title()
@@ -57,7 +56,7 @@ class Director:
             self.deck.show_cards()
             self.deck.calculate_draw(self.player.choice)
             self.player.set_score(self.deck.value)
-            self.player.show_score
+            self.player.show_score()
             self.ask_quit_game()
 
         self.do_end_game()
@@ -66,7 +65,7 @@ class Director:
     def do_end_game(self):
         """Provides a clean exit to the game by printing the final score and saying goodbye.
         
-        Args:
+        Parameters:
             self (Director): an instance of Director.
         """
         print()
@@ -85,7 +84,7 @@ class Director:
         """Ask the user if they want to keep playing. Updates the is_playing attribute based
         on player's decision.
 
-        Args:
+        Parameters:
             self (Director): An instance of Director.
         """
         # Make sure the player CAN still play before we ask... Player might have run out of points!
@@ -104,7 +103,7 @@ class Director:
     def ask_hi_lo(self):
         """Ask the user to guess if the next card is higher or lower.
 
-        Args:
+        Parameters:
             self (Director): An instance of Director.
         """
         prompt = "Do you think the next card is higher or lower?"

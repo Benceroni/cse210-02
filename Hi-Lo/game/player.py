@@ -28,7 +28,10 @@ class Player():
 
 
     def show_score(self):
-        """Displays the player's current score."""
+        """Displays the player's current score.
+        
+        Parameters:
+            self (Player): An instance of Player."""
         print(f"{self.name}'s current score is: {self.score}")
 
 
