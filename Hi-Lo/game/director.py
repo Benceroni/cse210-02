@@ -20,7 +20,7 @@ class Director:
             self (Director): an instance of Director.
         """
         self.deck = Deck()
-        self.player = Player()
+        self.player = Player("Player", 300)
 
 
 
