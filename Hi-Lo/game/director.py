@@ -23,7 +23,6 @@ class Director:
         self.player = Player("Player", 300)
 
 
-
     def show_title(self):
         """Shows a title screen and displays the rules of the game.
         
@@ -68,7 +67,6 @@ class Director:
         Parameters:
             self (Director): an instance of Director.
         """
-        print()
         if self.player.score <= 0:  # Player ran out of points. (Possible to go negative.)
             print("Well, shoot... You ran out of points. Your streak is over.")
         else:   # Or the player must have chosen to quit.
@@ -89,14 +87,9 @@ class Director:
         """
         # Make sure the player CAN still play before we ask... Player might have run out of points!
         if self.player.is_playing:
-            valid_input = False   
-            while not valid_input:
-                user_response = input("Would you like to keep playing? [y/n]: ").lower()
-                valid_input = user_response in ['y','n']
-                if not valid_input:
-                    print("I'm sorry, please confine your response to 'y' or 'n'.\n")
-
-            self.player.is_playing = (user_response == 'y')
+            prompt = "Would you like to keep playing?"
+            self.player.make_choice(prompt)
+            self.player.is_playing = (self.player.choice == 'y')
             print()
 
 
