@@ -43,12 +43,7 @@ class Player():
             self (Player): An instance of Player.
             value (int): A point value to be added (or subtracted) from the player's score.
         """
-        print()
-        if value == 100:
-            print("You won 100 points!")
-        else:
-            print("Aw... You lost 75 points.")
-        print()
+        print(f"\nFor your efforts, you have been awarded {value} points.")
         self.score += value
 
 

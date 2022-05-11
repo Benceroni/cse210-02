@@ -54,7 +54,7 @@ class Director:
             self.ask_hi_lo()
             self.deck.draw()
             self.deck.show_cards()
-            self.deck.calculate_draw(self.player.choice)
+            self.deck.calculate_draw(self.player.choice)    
             self.player.set_score(self.deck.value)
             self.player.show_score()
             self.ask_quit_game()
